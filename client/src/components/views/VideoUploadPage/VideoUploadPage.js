@@ -1,6 +1,7 @@
 import React ,{useState,config} from 'react'
 import Dropzone from 'react-dropzone';
 import {Typography,Button,Form,message,Input,Icon} from 'antd'; //CSS를 누군가가 만들어놓은것을 사용
+import {useSelector} from 'react-redux';
 const Axios=require('axios');
 
 
@@ -17,8 +18,9 @@ const CategoryOptions=[
     {value:3,label:"Food & Life"}
 ]
 
-function VideoUploadPage() {
+function VideoUploadPage(props) {
 
+    const user=useSelector(state=>state.user); //state을 가져와서 user를 가져온다 (state=>state.user) 의 의미
     const [VideoTitle,setVideoTitle]=useState("");
     const [Description,setDescription]=useState("");
     const [Private,setPrivate]=useState(0);
@@ -74,6 +76,35 @@ function VideoUploadPage() {
     }
        //서버로 파일을 보내고 받으려면 onDrop 함수처럼 헤더를 보내줘야 오류가생기지않음 
     
+    const onSumit=(e)=>{
+        e.preventDefault(); //이건 화면이 바뀌는것을 방지함
+        const variables={
+            writer: user.userData._id,
+            title:VideoTitle ,
+            description:Description,
+            privacy:Private,
+            filePath:FilePath,
+            category:Category,
+            duration:Duration,
+            thumbnail:ThumbnailPath,
+
+        }
+
+        Axios.post('/api/video/uploadVideo',variables)
+        .then(response=>{
+            if(response.data.success)
+            {
+               message.success('성공적으로 업로드 했습니다.');      //이거 좋다.
+               setTimeout(()=>{
+                props.history.push('/');
+               },3000);
+        
+            }
+            else{
+                alert('비디오 업로드에 실패 했습니다.')
+            }
+        })
+    }
     return (
         <div style={{maxWidth:'700px',margin:'2rem auto'}}>
             <div style={{textAlign:'center',marginBottom:'2rem'}}>
@@ -82,7 +113,7 @@ function VideoUploadPage() {
                   </Title>
             </div>
 
-            <Form onSubmit>
+            <Form onSubmit={onSumit}>
                <div style={{display:'flex',justifyContent:'space-between'}}>
                      <Dropzone
                         onDrop={onDrop}
@@ -132,7 +163,7 @@ function VideoUploadPage() {
                 </select>
                 <br/>
                 <br/>
-                <Button type="primary" size="large" onClick>
+                <Button type="primary" size="large" onClick={onSumit}>
                     Submit
                 </Button>
             </Form> 

@@ -1,7 +1,7 @@
- const express = require('express');
+const express = require('express');
 const router = express.Router();
 const { User } = require("../models/User");
-//const {Video}=require("../models/Video")
+const {Video}=require("../models/Video"); //video 모델을 import 해온다.
 const { auth } = require("../middleware/auth");
 const multer=require('multer');
 var ffmpeg=require('fluent-ffmpeg');
@@ -36,6 +36,15 @@ router.post('/uploadfiles',(req,res)=>{
             return res.json({success:false,err});
         }
         return res.json({success:true,url:res.req.file.path,fileName:res.req.file.filename})
+    })
+})
+
+router.post('/uploadVideo',(req,res)=>{                   //잘 기억해놔야함 몽고DB에 저장하는 기본적 틀..
+    //클라이언트에서 받은 비디오의 정보를 저장한다.
+    const video=new Video(req.body) //req.body에는 client에서 보낸 variable이 들어있다.
+    video.save((err,doc)=>{   //몽고 db에 저장하는 과정.
+        if(err) return res.json({success: false,err})
+        res.status(200).json({success:true}) //성공하면 response가 status(200)이 온다.
     })
 })
 
