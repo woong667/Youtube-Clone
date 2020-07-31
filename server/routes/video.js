@@ -5,6 +5,7 @@ const {Video}=require("../models/Video"); //video 모델을 import 해온다.
 const { auth } = require("../middleware/auth");
 const multer=require('multer');
 var ffmpeg=require('fluent-ffmpeg');
+const { response } = require('express');
 
 //========================STORAGE MULTER CONFIG===========================//
 let storage=multer.diskStorage({
@@ -45,6 +46,28 @@ router.post('/uploadVideo',(req,res)=>{                   //잘 기억해놔야�
     video.save((err,doc)=>{   //몽고 db에 저장하는 과정.
         if(err) return res.json({success: false,err})
         res.status(200).json({success:true}) //성공하면 response가 status(200)이 온다.
+    })
+})
+
+
+router.post('/getVideoDetail',(req,res)=>{                   //잘 기억해놔야함 몽고DB에 저장하는 기본적 틀..
+   Video.findOne({"_id":req.body.videoId}).populate("writer") //writer 뿐만 아니라 다른 모든정보도 가져오기위해서.
+   .exec((err,videoDetail)=>{
+       if(err) return res.status(400).send(err)
+       return res.status(200).json({success:true,videoDetail});
+   })
+
+})
+
+
+router.get('/getVideos',(req,res)=>{                   //잘 기억해놔야함 몽고DB에 저장하는 기본적 틀..
+    
+    //비디오를 db에서 가져와서 client에 보낸다.
+    Video.find()
+    .populate('writer')         //populate를 해줘야지만 모든 데이터를 가져올 수 있다.
+    .exec((err,videos)=>{
+        if(err) return res.status(400).send(err);
+        res.status(200).json({success: true,videos})
     })
 })
 
