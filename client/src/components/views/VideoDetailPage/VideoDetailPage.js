@@ -1,8 +1,8 @@
 import React,{useState,useEffect} from 'react'
 import {Row,Col,List,Avatar} from 'antd'
 import Axios from 'axios'
-import SideVideo from './Sections/SideVideo.js';
-import Subscribe from './Sections/Subscribe.js';
+import SideVideo from './Sections/SideVideo';
+import Subscribe from './Sections/Subscribe';
 function VideoDetailPage(props) {
 
   
@@ -17,6 +17,7 @@ function VideoDetailPage(props) {
             if(response.data.success)
             {
                 setVideoDetail(response.data.videoDetail)
+
             }else
             {
                 alert("비디오 정보를 가져오기 실패했습니다.")
@@ -31,8 +32,8 @@ function VideoDetailPage(props) {
                <video style={{width:'100%'}} src={`http://localhost:5000/${VideoDetail.filePath}`} controls/>
                  
                  <List.Item
-                      actions={[<Subscribe userTo={VideoDetail.writer._id}/>]}>
-
+                      actions={[<Subscribe userTo={VideoDetail.writer._id} userFrom={localStorage.getItem('userId')}/>]}>
+                     
                        <List.Item.Meta
                           avartar={<Avatar src={VideoDetail.writer.image}/>}
                           title={VideoDetail.writer.name}

@@ -35,7 +35,8 @@ app.use(cookieParser());
 
 app.use('/api/users', require('./routes/users'));
 app.use('/api/video',require('./routes/video')); //이 부분에서 api/video 로 request를 보내면 routes/video로 간다.
-app.use('/api/subscribe/subscribeNumber',require('./routes/subscribe'));
+//app.use('/api/subscribe/subscribeNumber',require('./routes/subscribe'));
+app.use('/api/subscribe',require('./routes/subscribe'));
 //use this to show the image you have in node js server to client (react js)
 //https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
 app.use('/uploads', express.static('uploads'));

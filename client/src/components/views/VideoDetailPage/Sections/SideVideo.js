@@ -35,7 +35,6 @@ function SideVideo() {
         .then(response=>{
             if(response.data.success)
             {
-             console.log(response.data);
              setsideVideos(response.data.videos)
             }
             else{
