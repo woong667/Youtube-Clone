@@ -3,9 +3,11 @@ const router = express.Router();
 const { User } = require("../models/User");
 const {Video}=require("../models/Video"); //video 모델을 import 해온다.
 const { auth } = require("../middleware/auth");
+const {Subscriber}=require('../models/Subscriber');
 const multer=require('multer');
 var ffmpeg=require('fluent-ffmpeg');
 const { response } = require('express');
+
 
 //========================STORAGE MULTER CONFIG===========================//
 let storage=multer.diskStorage({
@@ -69,6 +71,31 @@ router.get('/getVideos',(req,res)=>{                   //잘 기억해놔야함 
         if(err) return res.status(400).send(err);
         res.status(200).json({success: true,videos})
     })
+})
+
+
+router.post('/getSubscriptionVideos',(req,res)=>{                   //잘 기억해놔야함 몽고DB에 저장하는 기본적 틀..
+    
+    //자신의 아이디를 가지고 구독하는 사람들을 찾는다.
+
+    Subscriber.find({userFrom:req.body.userFrom})
+    .exec((err,subscriberInfo)=>{    //subscriberInfo에는 내가 구독하는 사람들의 정보가 담겨져있다.
+        if(err) return res.status(400).send(err);
+        
+        let subscribedUser=[];
+        //이제 subscriberInfo에서 map을 돌려서
+        subscriberInfo.map((subscriber,i)=>{
+            subscribedUser.push(subscriber.userTo)
+        })
+        Video.find({writer:{$in:subscribedUser}})  //mongoDB의 새로운기능이다. $in:배열을 해주면 몇명이던 상관없이 다 가지고온다.
+        .populate('writer')  //이제 해당 writer의 모든 정보들을 가져오기위해서 populate를 한다.
+        .exec((err,videos)=>{
+            if(err) return res.status(400).send(err);
+            res.status(200).json({success:true,videos});
+        }) 
+    })
+    //찾은 사람들의 비디오를 가지고 온다.
+   
 })
 
 

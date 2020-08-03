@@ -9,7 +9,6 @@ function Subscribe(props) {
 
     useEffect(() => {  
        let variable={userTo:props.userTo} //Subscribe.js로 올때 props로 담아왔구낭.
-       console.log(variable.userTo);
        Axios.post('/api/subscribe/subscribeNumber',variable)
        .then(response=>{
            if(response.data.success)
@@ -47,13 +46,9 @@ function Subscribe(props) {
             userFrom:props.userFrom 
         }
         //이미 구독중이라면
-        console.log(subscribedVariable.userTo);
-        console.log(subscribedVariable.userFrom);
-        console.log(Subscribed)
-        console.log(SubscribeNumber)
         //구독버튼 누르면 여기까지 정보는 옴.
 
-        if(Subscribed){
+        if(Subscribed){ //구독중이라면
              Axios.post('/api/subscribe/unSubscribe',subscribedVariable)
              .then(response=>{
                  if(response.data.success){
