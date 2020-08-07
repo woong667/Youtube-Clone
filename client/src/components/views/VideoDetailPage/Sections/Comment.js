@@ -2,10 +2,10 @@ import React,{useState,useEffect} from 'react'
 import Axios from 'axios'
 import {useSelector} from 'react-redux';
 import SingleComment from './SingleComment';
+import ReplyComment from './ReplyComment';
 
 function Comment(props) {
 
-    const videoId=props.postId;
     const user =useSelector(state=>state.user); //redux-hook을 사용하여(useSelector)를 사용.. Storidge 써도 되지만 이렇게 로그인한 user정보 가져오자
     const [commentValue, setcommentValue] = useState("")
     const handleClick=(event)=>{
@@ -15,11 +15,11 @@ function Comment(props) {
     const Variable={
         content:commentValue,
         writer:user.userData._id, //리덕스에서 userId가져오기.
-        postId:videoId
+        postId:props.postId
     }
 
     const onSubmit=(event)=>{
-          event.preventDefault();  //이건 계속 나왔던 button을 submit을 해도 페이지 로딩이 되지않게 막아주는 코드 중요중요
+         event.preventDefault();  //이건 계속 나왔던 button을 submit을 해도 페이지 로딩이 되지않게 막아주는 코드 중요중요
          Axios.post('/api/comment/saveComment',Variable)
          .then(response=>{
              if(response.data.success){
@@ -39,8 +39,13 @@ function Comment(props) {
             <hr />
 
             {/* comment Lists */}
-            {props.commentLists&&props.commentLists.map((comment,index)=>(
-                (!comment.responseTo&&<SingleComment refreshFuntion={props.refreshFunction} comment={comment} postId={videoId}/>  )
+            {props.CommentLists&&props.CommentLists.map((comment,index)=>(
+                (!comment.responseTo&&
+                <React.Fragment>
+                <SingleComment refreshFunction={props.refreshFunction} comment={comment} postId={props.postId}/> 
+                <ReplyComment refreshFunction={props.refreshFunction} parentCommentId={comment._id} postId={props.postId} CommentLists={props.CommentLists}/>
+                </React.Fragment>
+                 )
                    
             ))}
         

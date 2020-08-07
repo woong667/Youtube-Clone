@@ -13,29 +13,34 @@ function SingleComment(props) {
         setOpenReply(!OpenReply);
     }
 
-    const onHandleClick=(event)=>{
+    const onHandleChange=(event)=>{
         setCommentValue(event.currentTarget.value);
     }
 
    const onSubmit=(event)=>{
       event.preventDefault();  //이건 계속 나왔던 button을 submit을 해도 페이지 로딩이 되지않게 막아주는 코드 중요중요
+
+
       const variables={
         content:CommentValue,
-        writet:user.userData._id, //리덕스에서 userId가져오기.
+        writer:user.userData._id, //리덕스에서 userId가져오기.
         postId:props.postId,
         responseTo:props.comment._id
          }  
+
+
       Axios.post('/api/comment/saveComment',variables)
      .then(response=>{
          if(response.data.success){
              console.log(response.data);
-             setCommentValue("");
-             props.refreshFunction(response.data);
+             setCommentValue("")
+             setOpenReply(false);
+             props.refreshFunction(response.data.result)
          }
          else{
               alert('정보를 받아오지 못했습니다.')
          }
-     });
+     })
     }
 
     const actions=[   //Reply to 가 뜨도록 하는 코드
@@ -54,7 +59,7 @@ function SingleComment(props) {
               <form style={{display:'flex'}} onSubmit={onSubmit}>
               <textarea 
                style={{width:'100%' ,borderRadius:'5px'}}
-               onChange={onHandleClick}      //여기와 위에 handleClick 함수가 전형적인 입력을 받을때 사용하는 코드
+               onChange={onHandleChange}      //여기와 위에 handleClick 함수가 전형적인 입력을 받을때 사용하는 코드
                value={CommentValue}
                placeholder='댓글을 작성해 주세요(욕설,비방,광고 금지)'
                />

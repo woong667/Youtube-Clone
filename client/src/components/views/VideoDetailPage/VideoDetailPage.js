@@ -31,6 +31,7 @@ function VideoDetailPage(props) {
            if(response.data.success){
                      
                      setComments(response.data.comments);
+               
            }
            else{
               alert('댓글 정보를 가져오는데 실패했습니다.')
@@ -63,7 +64,7 @@ function VideoDetailPage(props) {
                       </List.Item>
 
                       {/* comment */}
-                      <Comment refreshFunction={refreshFunction} commentLists={Comments} postId={videoId}/>
+                      <Comment refreshFunction={refreshFunction} CommentLists={Comments} postId={videoId}/>
               
             </div>
           </Col>
