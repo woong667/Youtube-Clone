@@ -3,6 +3,7 @@ import {Row,Col,List,Avatar} from 'antd'
 import Axios from 'axios'
 import SideVideo from './Sections/SideVideo';
 import Subscribe from './Sections/Subscribe';
+import LikeDisLikes from './Sections/LikeDisLikes';
 import Comment from './Sections/Comment'; 
 function VideoDetailPage(props) {
 
@@ -53,7 +54,7 @@ function VideoDetailPage(props) {
                <video style={{width:'100%'}} src={`http://localhost:5000/${VideoDetail.filePath}`} controls/>
                  
                  <List.Item
-                      actions={[subscribeButton]}>
+                      actions={[<LikeDisLikes video userId={localStorage.getItem('userId')} videoId={videoId}/>,subscribeButton]}>
                      
                        <List.Item.Meta
                           avartar={<Avatar src={VideoDetail.writer.image}/>}

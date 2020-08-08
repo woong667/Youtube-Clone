@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import {Comment,Avatar ,Button,Input} from 'antd';
 import {useSelector} from 'react-redux';
+import LikeDisLike from './LikeDisLikes';
 import Axios from 'axios'
 
 const {TextArea}=Input;
@@ -44,13 +45,14 @@ function SingleComment(props) {
     }
 
     const actions=[   //Reply to 가 뜨도록 하는 코드
+        <LikeDisLike  userId={localStorage.getItem('userId')} commentId={props.comment}/>,
         <span onClick={onClickReply} key="comment-basic-reply-to">Reply to</span>
     ]
 
     return (
         <div>
             <Comment
-                  actions={actions}
+                  actions={actions }
                   author={props.comment.writer.name}
                   avatar={<Avatar src={props.comment.writer.image} alt/>} //avartar가 프사같은거였구만
                   content={<p>{props.comment.content}</p>}
