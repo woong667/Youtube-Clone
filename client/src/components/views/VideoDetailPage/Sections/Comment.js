@@ -19,6 +19,7 @@ function Comment(props) {
     }
 
     const onSubmit=(event)=>{
+       
          event.preventDefault();  //이건 계속 나왔던 button을 submit을 해도 페이지 로딩이 되지않게 막아주는 코드 중요중요
          Axios.post('/api/comment/saveComment',Variable)
          .then(response=>{
