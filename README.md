@@ -9,7 +9,9 @@
 + Like,Dislike
 + replies
 
-*DataBase : mongoDB*
+*DataBase*
+---------------------
+MongoDB
 
 
 
