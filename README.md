@@ -1,4 +1,4 @@
-# Video Upload WebSite by react(feat: Youtube)
+# Video Upload WebSite by React(feat: Youtube)
 
 *Function*
 ----------------------
@@ -8,6 +8,10 @@
 + Subscribe
 + Like,Dislike
 + replies
+
+*DataBase : mongoDB*
+
+
 
 *ScreenShot*
 ----------------------
